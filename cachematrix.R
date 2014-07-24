@@ -1,15 +1,36 @@
-## Put comments here that give an overall description of what your
-## functions do
+## makeCacheMatrix is a function which gets, sets the matrix value and its inverse
+## cacheSolve is a function where it determines the data is available in cache or not
+## 
 
-## Write a short comment describing this function
+## originalMatrix is passed to the function which is strored 
+## inverseMatrix is stored as NULL later the Inverse is set in the setInverse function
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(originalMatrix = matrix()) {
+	 inverseMatrix <- NULL
+	set <- function(setMatrix){
+			originalMatrix <<- setMatrix
+			inverseMatrix <<- NULL
+			}
+	get <- function() originalMatrix
+	setInverse <- function(originalMatrix) inverseMatrix <<- solve(originalMatrix)
+	getInverse <- function() inverseMatrix
+	list(set = set, get = get,
+	      setInverse = setInverse,
+	      getInverse = getInverse)
 }
 
 
-## Write a short comment describing this function
+## This funtion determines if the matrix passed is already present in the Cached
+## data and returns if present or creates a inverse variable
 
-cacheSolve <- function(x, ...) {
+cacheSolve <- function(instance, ...) {
         ## Return a matrix that is the inverse of 'x'
+	inverseMatrix <- instance$getInverse()	
+	if(!is.null(inverseMatrix)) {
+                message("getting cached data")
+                return(inverseMatrix)
+        }
+	matrix <- instance$get()
+	inverseMatrix <- instance$setInverse(matrix)
+	inverseMatrix
 }
